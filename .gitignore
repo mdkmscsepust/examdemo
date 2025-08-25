@@ -6,3 +6,4 @@ backend/backend.Domain/obj
 backend/backend.Domain/bin
 backend/backend.Infrastructure/obj
 backend/backend.Infrastructure/bin
+client/node_modules
