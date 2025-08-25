@@ -1,2 +1,8 @@
 backend/backend.API/obj
 backend/backend.API/bin
+backend/backend.Application/obj
+backend/backend.Application/bin
+backend/backend.Domain/obj
+backend/backend.Domain/bin
+backend/backend.Infrastructure/obj
+backend/backend.Infrastructure/bin
