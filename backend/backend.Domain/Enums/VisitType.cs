@@ -2,7 +2,7 @@ namespace backend.Domain.Enums
 {
     public enum VisitType
     {
-        FirstVisit,
-        FollowUp
+        FirstVisit=1,
+        FollowUp=2
     }
 }

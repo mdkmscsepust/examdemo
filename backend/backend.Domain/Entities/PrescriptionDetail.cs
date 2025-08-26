@@ -9,5 +9,6 @@ namespace backend.Domain.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public Appointment Appointment { get; set; } = null!;
+        public Medicine Medicine { get; set; } = null!;
     }
 }

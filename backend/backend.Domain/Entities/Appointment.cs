@@ -10,6 +10,8 @@ namespace backend.Domain.Entities
         public string Diagnosis { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
         public VisitType VisitType { get; set; }
+        public Patient Patient { get; set; } = null!;
+        public Doctor Doctor { get; set; } = null!;
         public ICollection<PrescriptionDetail> PrescriptionDetails { get; set; } = new List<PrescriptionDetail>();
 
     }

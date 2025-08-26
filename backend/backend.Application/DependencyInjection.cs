@@ -9,6 +9,7 @@ namespace backend.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<PrescriptionPdfService>();
             return services;
         }
     }

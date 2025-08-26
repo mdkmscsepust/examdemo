@@ -20,7 +20,8 @@ namespace backend.Infrastructure.Data
             modelBuilder.Entity<Doctor>().ToTable("Doctors").HasKey(x => x.Id);;
             modelBuilder.Entity<Medicine>().ToTable("Medicines").HasKey(x => x.Id);;
 
-            modelBuilder.Entity<Appointment>(entity => {
+            modelBuilder.Entity<Appointment>(entity =>
+            {
                 entity.ToTable("Appointments");
                 entity.HasKey(x => x.Id);
 
@@ -36,7 +37,14 @@ namespace backend.Infrastructure.Data
                 entity.Property(x => x.VisitType)
                     .HasConversion<string>()
                     .IsRequired();
-                }); 
+                entity.HasOne(x => x.Patient)
+                        .WithMany(p => p.Appointments)
+                        .HasForeignKey(x => x.PatientId);
+                entity.HasOne(x => x.Doctor)
+                        .WithMany(p => p.Appointments)
+                        .HasForeignKey(x => x.DoctorId);
+
+                });
 
             modelBuilder.Entity<PrescriptionDetail>(entity =>
             {
@@ -60,6 +68,9 @@ namespace backend.Infrastructure.Data
                     .WithMany(a => a.PrescriptionDetails)
                     .HasForeignKey(x => x.AppointmentId)
                     .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(x => x.Medicine)
+                    .WithOne(a => a.PrescriptionDetail)
+                    .HasForeignKey<PrescriptionDetail>(x => x.MedicineId);
             });
 
             modelBuilder.Entity<Doctor>().HasData(

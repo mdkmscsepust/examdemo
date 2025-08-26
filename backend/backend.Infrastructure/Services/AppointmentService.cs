@@ -49,7 +49,10 @@ namespace backend.Infrastructure.Services
         {
             try
             {
-                var query = _dbContext.Appointments.Include(x => x.PrescriptionDetails).AsQueryable();
+                var query = _dbContext.Appointments.Include(x => x.Patient)
+                .Include(x => x.Doctor)
+                .Include(x => x.PrescriptionDetails)
+                    .ThenInclude(m => m.Medicine).AsQueryable();
 
                 if (patientId.HasValue)
                     query = query.Where(a => a.PatientId == patientId.Value);
@@ -86,7 +89,12 @@ namespace backend.Infrastructure.Services
         {
             try
             {
-                var appointment = await _dbContext.Appointments.Include(x => x.PrescriptionDetails).FirstOrDefaultAsync(x => x.Id == id);
+                var appointment = await _dbContext.Appointments
+                .Include(x => x.Patient)
+                .Include(x => x.Doctor)
+                .Include(x => x.PrescriptionDetails)
+                    .ThenInclude(m => m.Medicine)
+                .FirstOrDefaultAsync(x => x.Id == id);
                 if (appointment is null) return null!;
                 return appointment;
             }

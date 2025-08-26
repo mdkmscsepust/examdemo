@@ -1,0 +1,143 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h1>Appointments</h1>
+    <div class="controls">
+      <input type="text" class="search-bar" placeholder="Search..." />
+      <select>
+        <option>Doctor</option>
+        <option *ngFor="let d of doctors">{{ d.name }}</option>
+      </select>
+      <select>
+        <option>Visit Type</option>
+        <option *ngFor="let type of visitTypes | keyvalue">{{ type.value }}</option>
+      </select>
+      <button class="add-btn" (click)="toggleForm()">
+        {{ showForm ? 'Cancel' : '+ Add Appointment' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Appointments Grid -->
+  <table *ngIf="!showForm">
+    <thead>
+      <tr>
+        <th>Patient</th>
+        <th>Doctor</th>
+        <th>Date</th>
+        <th>Visit Type</th>
+        <th>Diagnosis</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let appointment of appointmentOutDTO">
+        <td>
+          {{ appointment.patientName }}<br />
+          <span class="download-link" (click)="downloadAppointment(appointment.id)">Download</span>
+        </td>
+        <td>{{ appointment.doctorName }}</td>
+        <td>{{ appointment.appointmentDate | date:'dd-MMM-yy' }}</td>
+        <td>{{ appointment.visitType }}</td>
+        <td>{{ appointment.diagnosis }}</td>
+        <td>
+          <a href="#" class="action-links" (click)="toggleForm()">Edit</a>
+          <a href="#" class="action-links" (click)="downloadAppointment(appointment.id)">Delete</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Appointment Form -->
+  <div *ngIf="showForm" class="form-container">
+    <form [formGroup]="appointmentForm" (ngSubmit)="saveAppointment()" class="appointment-form">
+      <div class="form-row">
+        <label>Patient</label>
+        <select formControlName="patientId">
+          <option value="">-- Select Patient --</option>
+          <option *ngFor="let p of patients" [value]="p.id">{{ p.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label>Doctor</label>
+        <select formControlName="doctorId">
+          <option value="">-- Select Doctor --</option>
+          <option *ngFor="let d of doctors" [value]="d.id">{{ d.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label>Date</label>
+        <input type="datetime-local" formControlName="appointmentDate" />
+      </div>
+
+      <div class="form-row">
+        <label>Diagnosis</label>
+        <input type="text" formControlName="diagnosis" />
+      </div>
+
+      <div class="form-row">
+        <label>Visit Type</label>
+        <div class="radio-group">
+            <label>
+            <input 
+                type="radio" 
+                [value]="visitTypes.FirstVisit" 
+                formControlName="visitType">
+            First Visit
+            </label>
+
+            <label>
+            <input 
+                type="radio" 
+                [value]="visitTypes.FollowUp" 
+                formControlName="visitType">
+            Follow-up
+            </label>
+        </div>
+        </div>
+
+      <div class="form-row">
+        <label>Notes</label>
+        <textarea formControlName="notes" rows="2"></textarea>
+      </div>
+
+      <!-- Prescription Details -->
+      <div class="section-title">Prescription Details</div>
+
+      <div formArrayName="prescriptionDetails">
+        <div *ngFor="let detail of prescriptionDetails.controls; let i = index" [formGroupName]="i" class="prescription-row">
+          <div class="form-row">
+            <label>Medicine ID</label>
+            <input formControlName="medicineId" type="number" placeholder="e.g., 101" />
+          </div>
+          <div class="form-row">
+            <label>Dosage</label>
+            <input formControlName="dosage" type="text" placeholder="e.g., 500mg 2x/day" />
+          </div>
+          <div class="form-row">
+            <label>Start Date</label>
+            <input formControlName="startDate" type="date" />
+          </div>
+          <div class="form-row">
+            <label>End Date</label>
+            <input formControlName="endDate" type="date" />
+          </div>
+          <div class="form-row">
+            <label>Notes</label>
+            <input formControlName="notes" type="text" placeholder="e.g., After meals" />
+          </div>
+          <div class="form-row actions">
+            <button type="button" (click)="removePrescriptionDetail(i)" class="btn-remove">Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" (click)="addPrescriptionDetail()" class="btn-add">+ Add Prescription</button>
+        <button type="submit" class="btn-save">Save Appointment</button>
+      </div>
+    </form>
+  </div>
+</div>
